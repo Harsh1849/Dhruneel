@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Price Calculator</title>
+  </head>
+  <body>
+    <h1>Price Calculator</h1>
+    <p>Enter the weight:</p>
+    <input type="number" id="weight" />
+    <button onclick="calculatePrice()">Calculate Price</button>
+    <p id="result"></p>
+    
+    <script src="script.js"></script>
+  </body>
+</html>
+
+
+<script type="text/javascript">
+    function calculatePrice() {
+        const weight = document.getElementById("weight").value;
+        let price = 0;
+        
+        if (weight <= 10) 
+        {
+            price = 5;
+        } 
+        else if (weight <= 20) 
+        {
+            price = 10;
+        } 
+        else if (weight <= 30) 
+        {
+            price = 15;
+        } 
+        else 
+        {
+            price = 20;
+        }
+    
+        document.getElementById("result").innerHTML = `The price for ${weight} kg is $${price}.`;
+    }
+</script>
+   
