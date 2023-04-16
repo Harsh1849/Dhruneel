@@ -1,43 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Price Calculator</title>
-  </head>
-  <body>
-    <h1>Price Calculator</h1>
-    <p>Enter the weight:</p>
-    <input type="number" id="weight" />
-    <button onclick="calculatePrice()">Calculate Price</button>
-    <p id="result"></p>
-    
-    <script src="script.js"></script>
-  </body>
-</html>
+<head>
 
-
-<script type="text/javascript">
-    function calculatePrice() {
-        const weight = document.getElementById("weight").value;
-        let price = 0;
-        
-        if (weight <= 10) 
-        {
-            price = 5;
-        } 
-        else if (weight <= 20) 
-        {
-            price = 10;
-        } 
-        else if (weight <= 30) 
-        {
-            price = 15;
-        } 
-        else 
-        {
-            price = 20;
+    <style>
+        .checkout {
+            height: 300px;
+            width: 400px;
+            margin: 20px auto;
+            border: 2px solid black;
+            text-align: center;
         }
-    
-        document.getElementById("result").innerHTML = `The price for ${weight} kg is $${price}.`;
-    }
-</script>
-   
+    </style>
+
+	<title>Price Calculator</title>
+	<script>
+		function calculatePrice() {
+			var weight = document.getElementById("weight").value;
+			var country = document.getElementById("country").value;
+			
+			var Canada_price_list = {
+				"1": 10, "2": 20, "3": 30, "4": 40, "5": 50
+			};
+			var US_price_list = {
+				"1": 20, "2": 20, "3": 30, "4": 40, "5": 50
+			};
+			var Australia_price_list = {
+				"1": 30, "2": 20, "3": 30, "4": 40, "5": 50
+			};
+			var Golf_price_list = {
+				"1": 40, "2": 20, "3": 30, "4": 40, "5": 50
+			};
+			var Temp_price_list = {
+				"1": 50, "2": 20, "3": 30, "4": 40, "5": 50
+			};
+
+            
+            if(country == "Canada")
+            {
+                var price = Canada_price_list[weight] || "Weight not found in dictionary";
+            }
+            else if(country == "US")
+            {
+                var price = US_price_list[weight] || "Weight not found in dictionary";
+            }
+            else if(country == "Australia")
+            {
+                var price = Australia_price_list[weight] || "Weight not found in dictionary";
+            }
+            else if(country == "Golf")
+            {
+                var price = Golf_price_list[weight] || "Weight not found in dictionary";
+            }
+            else if(country == "Temp")
+            {
+                var price = Temp_price_list[weight] || "Weight not found in dictionary";
+            }
+            else
+            {
+                price = "Country not found"
+            }
+			
+			
+			// Display the calculated price to the user
+			document.getElementById("price").innerHTML = "Price: $" + price;
+		}
+	</script>
+</head>
+<body>
+
+    <div class="checkout">
+
+        <h1>Price Calculator</h1>
+        
+        <label for="weight">Weight (in kg): </label>
+        <input type="number" id="weight" name="weight"><br><br>
+
+        <label for="country">Choose a Country:</label>
+        <select name="country" id="country">
+            <option value="Canada">Canada</option>
+            <option value="US">US</option>
+            <option value="Australia">Australia</option>
+            <option value="Golf">Golf</option>
+            <option value="Temp">Temp</option>
+        </select><br><br>
+        
+        <button onclick="calculatePrice()">Calculate Price</button><br><br>
+        
+        <p id="price"></p>
+    </div>
+</body>
+</html>
