@@ -28,7 +28,7 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            text-align: center;
+            text-align: left;
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -36,12 +36,20 @@
 
         .result{
             padding: 5px;
-            text-align: center;
+            font-size: 18px;
+            text-align: left;
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
         
+        #price{
+            color: #1068EE;
+        }
+
+        #finalAmount{
+            color: #1068EE;
+        }
         
         label {
             font-size: 18px;
@@ -99,16 +107,24 @@
                 <select id="country">
                     <option value="USA">USA</option>
                     <option value="Canada">Canada</option>
-                    <option value="Mexico">Mexico</option>
+                    <option value="UK">UK</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Golf">Golf</option>
                 </select>
                 <br>
                 
                 <button id="calculateButton">Calculate Price</button>
             </div>
-            <br>
+            <br><br>
             
             <div class="result">
-                <p id="price"></p>
+
+                <label>Price (Per Kilogram):</label>
+                <u id="price"></u><br><br>
+
+                <label>Total Amount:</label>
+                <u id="finalAmount"></u>
+
             </div>
         </div>
     </main>
@@ -116,25 +132,19 @@
     <script>
         const prices = {
             "USA": {
-                "50": 5.99,
-                "100": 9.99,
-                "200": 15.99,
-                "500": 29.99,
-                "1000": 49.99
+                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
             },
             "Canada": {
-                "50": 6.99,
-                "100": 11.99,
-                "200": 17.99,
-                "500": 31.99,
-                "1000": 54.99
+                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10,
             },
-            "Mexico": {
-                "50": 7.99,
-                "100": 12.99,
-                "200": 19.99,
-                "500": 34.99,
-                "1000": 59.99
+            "UK": {
+                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
+            },
+            "Australia": {
+                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
+            },
+            "Golf": {
+                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
             }
         };
 
@@ -142,33 +152,19 @@
         const weightInput = document.getElementById("weight");
         const countrySelect = document.getElementById("country");
         const resultElement = document.getElementById("price");
+        const totalElement = document.getElementById("finalAmount");
 
         calculateButton.addEventListener("click", calculatePrice);
 
         function calculatePrice() {
             const weight = weightInput.value;
             const country = countrySelect.value;
-
-            if (!weight || !country) {
-                resultElement.textContent = "Please enter a weight and select a country.";
-                return;
-            }
-
             const priceData = prices[country];
-
-            if (!priceData) {
-                resultElement.textContent = "Sorry, we could not find the price for that country.";
-                return;
-            }
-
             const price = priceData[weight];
 
-            if (!price) {
-                resultElement.textContent = "Sorry, we could not find the price for that weight and country.";
-                return;
-            }
-
-            resultElement.textContent = `The price for ${weight} grams in ${country} is $${price.toFixed(2)}.`;
+            const totalamount = price * weight
+            resultElement.textContent = `RS ${price}/-`;
+            totalElement.textContent = `RS ${totalamount}/-`;
         }
     </script>
 </body>
