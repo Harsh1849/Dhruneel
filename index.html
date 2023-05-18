@@ -1,92 +1,175 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+    <title>Weight and Price Calculator</title>
     <style>
-        .checkout {
-            height: 300px;
-            width: 400px;
-            margin: 20px auto;
-            border: 2px solid black;
+        body {
+            margin: 0;
+            padding: 0;
+            background: url(background.jpg) no-repeat center center fixed;
+            background-size: cover;
+        }
+        
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 8px;
             text-align: center;
         }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .result{
+            padding: 5px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        
+        label {
+            font-size: 18px;
+        }
+        
+        input[type="number"] {
+            width: 200px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 2px solid #ccc;
+        }
+        
+        select {
+            width: 100px;
+            font-size: 15px;
+            margin-bottom: 20px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 2px solid #ccc;
+        }
+        
+        button {
+            font-size: 18px;
+            padding: 5px 10px;
+            background-color: #008CBA;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #006f8b;
+        }
     </style>
-
-	<title>Price Calculator</title>
-	<script>
-		function calculatePrice() {
-			var weight = document.getElementById("weight").value;
-			var country = document.getElementById("country").value;
-			
-			var Canada_price_list = {
-				"1": 10, "2": 20, "3": 30, "4": 40, "5": 50
-			};
-			var US_price_list = {
-				"1": 20, "2": 20, "3": 30, "4": 40, "5": 50
-			};
-			var Australia_price_list = {
-				"1": 30, "2": 20, "3": 30, "4": 40, "5": 50
-			};
-			var Golf_price_list = {
-				"1": 40, "2": 20, "3": 30, "4": 40, "5": 50
-			};
-			var Temp_price_list = {
-				"1": 50, "2": 20, "3": 30, "4": 40, "5": 50
-			};
-
-            
-            if(country == "Canada")
-            {
-                var price = Canada_price_list[weight] || "Weight not found in dictionary";
-            }
-            else if(country == "US")
-            {
-                var price = US_price_list[weight] || "Weight not found in dictionary";
-            }
-            else if(country == "Australia")
-            {
-                var price = Australia_price_list[weight] || "Weight not found in dictionary";
-            }
-            else if(country == "Golf")
-            {
-                var price = Golf_price_list[weight] || "Weight not found in dictionary";
-            }
-            else if(country == "Temp")
-            {
-                var price = Temp_price_list[weight] || "Weight not found in dictionary";
-            }
-            else
-            {
-                price = "Country not found"
-            }
-			
-			
-			// Display the calculated price to the user
-			document.getElementById("price").innerHTML = "Price: $" + price;
-		}
-	</script>
 </head>
 <body>
+    <header>
+        <nav>
+            <h2> DhruNeel Enterprise </h2>
+        </nav>
+    </header>
+    <br>
 
-    <div class="checkout">
+    <main>
+        <div class="container">
+            <div class="form">
+                <label for="weight">Weight (in K.G.):</label>
+                <input type="number" id="weight" />
+                <br>
 
-        <h1>Price Calculator</h1>
-        
-        <label for="weight">Weight (in kg): </label>
-        <input type="number" id="weight" name="weight"><br><br>
+                <label for="country">Country:</label>
+                <select id="country">
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Mexico">Mexico</option>
+                </select>
+                <br>
+                
+                <button id="calculateButton">Calculate Price</button>
+            </div>
+            <br>
+            
+            <div class="result">
+                <p id="price"></p>
+            </div>
+        </div>
+    </main>
 
-        <label for="country">Choose a Country:</label>
-        <select name="country" id="country">
-            <option value="Canada">Canada</option>
-            <option value="US">US</option>
-            <option value="Australia">Australia</option>
-            <option value="Golf">Golf</option>
-            <option value="Temp">Temp</option>
-        </select><br><br>
-        
-        <button onclick="calculatePrice()">Calculate Price</button><br><br>
-        
-        <p id="price"></p>
-    </div>
+    <script>
+        const prices = {
+            "USA": {
+                "50": 5.99,
+                "100": 9.99,
+                "200": 15.99,
+                "500": 29.99,
+                "1000": 49.99
+            },
+            "Canada": {
+                "50": 6.99,
+                "100": 11.99,
+                "200": 17.99,
+                "500": 31.99,
+                "1000": 54.99
+            },
+            "Mexico": {
+                "50": 7.99,
+                "100": 12.99,
+                "200": 19.99,
+                "500": 34.99,
+                "1000": 59.99
+            }
+        };
+
+        const calculateButton = document.getElementById("calculateButton");
+        const weightInput = document.getElementById("weight");
+        const countrySelect = document.getElementById("country");
+        const resultElement = document.getElementById("price");
+
+        calculateButton.addEventListener("click", calculatePrice);
+
+        function calculatePrice() {
+            const weight = weightInput.value;
+            const country = countrySelect.value;
+
+            if (!weight || !country) {
+                resultElement.textContent = "Please enter a weight and select a country.";
+                return;
+            }
+
+            const priceData = prices[country];
+
+            if (!priceData) {
+                resultElement.textContent = "Sorry, we could not find the price for that country.";
+                return;
+            }
+
+            const price = priceData[weight];
+
+            if (!price) {
+                resultElement.textContent = "Sorry, we could not find the price for that weight and country.";
+                return;
+            }
+
+            resultElement.textContent = `The price for ${weight} grams in ${country} is $${price.toFixed(2)}.`;
+        }
+    </script>
 </body>
 </html>
