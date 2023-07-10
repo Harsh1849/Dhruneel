@@ -1,171 +1,271 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Weight and Price Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-icons/font/bootstrap-icons.css">
+
     <style>
-        body {
+        .hide_element{
+            display: none;
+        }
+        
+        .light_gray {
+            color: #C0C0C0;
+        }
+
+        .is-invalid {
+            background-color: #f8d7da !important;
+        }
+
+        input.form-control:read-only {
+            background-color: #fff;
+        }
+
+        .new_line {
+            white-space: pre-wrap;
+        }
+
+        .non_clickable {
+            pointer-events: none;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
             margin: 0;
-            padding: 0;
-            background: url(background.jpg) no-repeat center center fixed;
+        }
+
+        /* .background_image {
+            background-image: url('3.jpg');
+            background-repeat: no-repeat;
             background-size: cover;
-        }
-        
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 8px;
-            text-align: center;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: center;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: left;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .result{
-            padding: 5px;
-            font-size: 18px;
-            text-align: left;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        #price{
-            color: #1068EE;
-        }
-
-        #finalAmount{
-            color: #1068EE;
-        }
-        
-        label {
-            font-size: 18px;
-        }
-        
-        input[type="number"] {
-            width: 200px;
-            font-size: 18px;
-            margin-bottom: 20px;
-            padding: 5px;
-            border-radius: 5px;
-            border: 2px solid #ccc;
-        }
-        
-        select {
-            width: 100px;
-            font-size: 15px;
-            margin-bottom: 20px;
-            padding: 5px;
-            border-radius: 5px;
-            border: 2px solid #ccc;
-        }
-        
-        button {
-            font-size: 18px;
-            padding: 5px 10px;
-            background-color: #008CBA;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        button:hover {
-            background-color: #006f8b;
-        }
+            background-position: center;
+        } */
     </style>
 </head>
-<body>
+
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav>
-            <h2> DhruNeel Enterprise </h2>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container justify-content-center">
+                <h2 class="navbar-brand mb-0">Speed Delivery Logistics</h2>
+            </div>
         </nav>
     </header>
     <br>
 
     <main>
         <div class="container">
-            <div class="form">
-                <label for="weight">Weight (in K.G.):</label>
-                <input type="number" id="weight" />
-                <br>
+            <form id="calculateForm">
+                <div id="myAlert" class="alert alert-danger hide_element">
+                    <strong>Pincode is Incorrect or Empty!! Please enter correct Pincode.</strong>
+                </div>
 
-                <label for="country">Country:</label>
-                <select id="country">
-                    <option value="USA">USA</option>
-                    <option value="Canada">Canada</option>
-                    <option value="UK">UK</option>
-                    <option value="Australia">Australia</option>
-                    <option value="Golf">Golf</option>
-                </select>
-                <br>
+                <div class="form-group">
+                    <label for="pincode">Pincode:</label>
+                    <div class="input-group">
+                        <input type="number" id="pincode" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div id="is_ODA" class="d-none">
+                        <button class="btn btn-outline-danger shadow non_clickable"><b>ODA</b></button>
+                        <span class="text-danger"> *Pincode Out of Delivery Area. Extra Charge is added in Total Amount.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Weight (Kg): <i>*Minimum 20Kg</i></label>
+                    <input type="number" id="weight" class="form-control" required />
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <label for="length">Length (cm):</label>
+                        <input type="number" id="length" class="form-control" required />
+                    </div>
+                    <div class="col">
+                        <label for="height">Height (cm):</label>
+                        <input type="number" id="height" class="form-control" required />
+                    </div>
+                    <div class="col">
+                        <label for="width">Width (cm):</label>
+                        <input type="number" id="width" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group hide_element" id="dimensionWeight">
+                    <label>Weight by Dimension (Kg):</label><br>
+                    <label>(Length * Height * Width) / 5000</label>
+                    <input tabindex="-1" type="number" class="form-control" id="dimensionWeightInput" readonly>
+                </div>
+
+                <button id="calculateButton" class="btn btn-primary mb-3">Calculate Price</button>
+
+            </form>
+        
+            <div id="resultDiv" class="container shadow p-3 mb-3 text-center hide_element rounded">
+                <label><b>Price:</b></label>
+                <span id="price"></span><br>
                 
-                <button id="calculateButton">Calculate Price</button>
-            </div>
-            <br><br>
-            
-            <div class="result">
-
-                <label>Price (Per Kilogram):</label>
-                <u id="price"></u><br><br>
-
-                <label>Total Amount:</label>
-                <u id="finalAmount"></u>
-
+                <label><b>ODA Charge:</b></label>
+                <span id="ODA_charge"></span><br>
+                <hr>
+                <label><b><h3>Total Amount:</h3></b></label>
+                <span><b><h3 id="finalAmount"></h3></b></span>
+                
+                <button id="placeOrderButton" class="btn btn-primary" data-toggle="modal" data-target="#orderModalDetails">Place Order</button>
             </div>
         </div>
     </main>
 
-    <script>
-        const prices = {
-            "USA": {
-                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
-            },
-            "Canada": {
-                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10,
-            },
-            "UK": {
-                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
-            },
-            "Australia": {
-                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
-            },
-            "Golf": {
-                "0.5": 10, "1": 10, "2": 10, "3": 10, "4": 10, "5": 10, "6": 10, "7": 10, "8": 10, "9": 10, "10": 10, "11": 10, "12": 10, "13": 10, "14": 10, "15": 10, "16": 10, "17": 10, "18": 10, "19": 10, "20": 10, "21": 10
-            }
-        };
+    <!-- order Modal Details -->
+    <div class="modal fade bd-example-modal-lg" id="orderModalDetails" tabindex="-1" role="dialog" aria-labelledby="orderModalDetailsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalDetailsLabel">Order Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-        const calculateButton = document.getElementById("calculateButton");
-        const weightInput = document.getElementById("weight");
-        const countrySelect = document.getElementById("country");
-        const resultElement = document.getElementById("price");
-        const totalElement = document.getElementById("finalAmount");
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-outline row">
+                                <div class="col">
+                                    <label class="form-label" for="modal_weight">Weight: </label>
+                                    <input type="number" id="modal_weight" class="form-control" required/>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label" for="modal_price">Price: </label>
+                                    <input type="text" id="modal_price" class="form-control" required/>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label" for="modal_pincode">Pincode: </label>
+                                    <input type="text" id="modal_pincode" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="form-outline row">
+                                <div class="col">
+                                    <label class="form-label" for="modal_ODA">ODA charge: </label>
+                                    <input type="number" id="modal_ODA" class="form-control" required/>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label" for="modal_total_amount">Total Amount = Price + ODA Charges</label>
+                                    <input type="number" id="modal_total_amount" class="form-control" required/>
+                                </div>
+                            </div><hr />
 
-        calculateButton.addEventListener("click", calculatePrice);
+                            <h4>Sender's Details:</h4>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="sender_fname">First name</label>
+                                        <input type="text" id="sender_fname" class="form-control" required/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="sender_lname">Last name</label>
+                                        <input type="text" id="sender_lname" class="form-control" required/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="sender_pnumber">Phone Number</label>
+                                        <input type="number" id="sender_pnumber" class="form-control" required/>
+                                    </div>
+                                </div>
+                            </div>
 
-        function calculatePrice() {
-            const weight = weightInput.value;
-            const country = countrySelect.value;
-            const priceData = prices[country];
-            const price = priceData[weight];
+                            <div class="form-outline">
+                                <label class="form-label" for="sender_address">Address</label>
+                                <input type="textarea" id="sender_address" class="form-control" required/>
+                            </div>
+                            <br>
+                            
+                            <h4>Receiver's Details:</h4>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="receiverer_fname">First name</label>
+                                        <input type="text" id="receiverer_fname" class="form-control" required/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="receiverer_lname">Last name</label>
+                                        <input type="text" id="receiverer_lname" class="form-control" required/>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="receiver_pnumber">Phone Number</label>
+                                        <input type="number" id="receiver_pnumber" class="form-control" required/>
+                                    </div>
+                                </div>
+                            </div>
 
-            const totalamount = price * weight
-            resultElement.textContent = `RS ${price}/-`;
-            totalElement.textContent = `RS ${totalamount}/-`;
-        }
-    </script>
+                            <div class="form-outline">
+                                <label class="form-label" for="receiver_address">Address</label>
+                                <input type="textarea" id="receiver_address" class="form-control" required/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <a id="sendOrderButton" class="btn btn-primary">Send Order Details</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-lg-start bg-dark text-white mt-auto">
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            
+            <div class="container text-center text-md-start">
+                <div class="row">
+                    <div class="col-md col-lg col-xl mx-auto">
+                        <h5 class="text-uppercase fw-bold"><b>OUR SERVICES</b></h5>
+                        <div class="light_gray">
+                            <h6>B2B Service</h6>
+                            <h6>B2C Service</h6>
+                            <h6>Amazon, Flipkart Self Order</h6>
+                            <h6>Private Website Orders</h6>
+                        </div>
+                    </div>
+
+                    <div class="col-md col-lg col-xl mx-auto">
+                        <h5 class="text-uppercase fw-bold"><b>Contact Us</b></h5>
+                        <div class="light_gray">
+                            <h6>+91 74340 28012</h6>
+                            <h6><span class="new_line">Sr. No. 35/3, Ground Floor, Shop No. 1-2, Near Suman Pratik, Oppo. Vrindavan Farm, Dabholi Road Surat - 395004</span></h6>
+                            <!-- <h6> info@example.com </h6> -->
+                            <!-- <h6>+ 01 234 567 89</h6> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="justify-content-center p-4 navbar navbar-dark bg-dark">
+            © 2023 Speed Delivery Logistics. All rights reserved.
+        </div>
+    </footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
 </body>
+
 </html>
